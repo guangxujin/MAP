@@ -1,5 +1,5 @@
 # MAP
-# Model-aied predictor for cancer immunotherapy response.
+# Model-Aided Predictor for cancer immunotherapy response.
 
 ## Installation
 
@@ -25,7 +25,7 @@ GPU is required for analysis of CyTOF datasets or the datasets with single cell 
 ### run MAP
 cd py
 
-python SPEA2_numba.py
+python MAP_numba.py
 ### heatmap
 cd Rcodes
 
