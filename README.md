@@ -22,13 +22,13 @@ Conda
 GPU is required for analysis of CyTOF datasets or the datasets with single cell number large than 100,000.
 ## Example
 
-##run MAP
+# run MAP
 cd py
 
 python SPEA2_numba.py
-##heatmap
+# heatmap
 cd Rcodes
 
 R heatmap_MAP.R
-##ROC curve
+# ROC curve
 R ROC.MAP.R
