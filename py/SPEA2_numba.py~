@@ -1,0 +1,132 @@
+# -*- coding: utf-8 -*-
+
+import config
+from  random import *
+import multiprocessing
+import time,os,sys
+
+#from utils import *
+import numpy as np
+from time import sleep
+
+if config.GPU <> "":
+	from SF_numba_1 import *
+	from numba import cuda
+if config.GPU == "":
+	from SF_numba import *
+#cuda.select_device(0)
+#from scoop import futures
+'''
+Created on 5-1-2018
+@author: DBPR
+@email: DBPR@gmail.com
+'''
+
+start = time.time()
+print sys.argv
+config.f=config.data_dir+'/'+sys.argv[1]+'.txt'
+config.device_num=sys.argv[2]
+print "processing the job at GPU device ",config.device_num
+cuda.select_device(int(config.device_num))
+#config.f=config.out_dir+'/'+sys.argv[1]+'/2archive.txt.reformat.txt'
+def main():
+
+  #config.Iter=5
+  while 1:
+    #load data
+	data=load_data()	
+	config.N=len(data)
+	l=config.N
+#	printProgressBar(0, l, prefix = 'Progress:', suffix = 'Complete', length = 100)
+#	print "Step 1.3 initializing fitness"
+	config.Iter += 1
+#        print config.f
+	chunks=get_chunks_shuffle(data)
+        #print chunks
+	print len(chunks[0]),len(chunks)
+        print 'current iteration: ',config.Iter 
+	curr_gen = 0
+	
+	for curr_gen in range (len(chunks)):
+#		print "Step 3 Environmental selection"
+		# Step 1 Initialization
+#		print "Step 1 Initialization"
+#		print "Reading data by",config.core_num,'CPUs or GPUs'
+		
+		initial_pop()
+
+		#pop[1][:]=a[1]
+		#pop[0][:]=a[0]
+#		print len(config.pop)
+#		print "Step 1.2 Loading data"
+		#map(load_big_data,range(len(config.pop)))
+		#map(load_big_data,chunks[curr_gen])
+		#config.pop=chunks[curr_gen]
+                #print config.pop
+                #		print "data uploaded"
+#                if config.num%10==0:
+#                      print "current generation :",curr_gen
+#                      end = time.time() 
+#                      print config.num
+#                      print config.opti_num                                                
+#                      print 'relapse time is ',(end - start)  
+		# Step 2 Fitness assignement in parallel
+		#invalid_ind = [ind for ind in pop + archive if not ind.fitness.valid]
+                #print config.pop
+                a=float(config.factor)
+                S_data=np.array(data,dtype=np.float32)
+                S_data=a*S_data
+                sample_L=range (0,len(S_data))
+#                if len(S_data)>30000:
+ #                       sample_l=sample(sample_L,30000)
+  #                      S_data=S_data[sample_l,:]
+		config.S_data=S_data[:,1:len(S_data[0,:])]
+
+		
+		config.archive=fitness(config.S_data)
+		#config.archive=np.concatenate((S_data[:,len(S_data[1,]-1)],config.F),axis=1)
+#                for indi in config.S_data:
+#                     config.F.append(fitness(indi))
+		#print config.F[1:5]
+
+		#config.archive=SPEA2()
+
+
+
+
+#		print len(config.archive)
+#		print config.archive[0:2]
+
+		# Step 5 Mating Selection
+
+#		print "Step 5 Mating Selection"
+		# Step 6 Variation
+		# crossover 50% and mutation 6%
+		
+
+		# Write archive if full
+		#write=0
+		#if len(config.archive) >= config.archive_size:
+		#	write=1
+		#	write_archive()
+		# Step 4 Termination
+		#if curr_gen ==len(chunks)-1:
+		if True:
+			#if write == 0:
+		      write_archive()
+                      
+		      break
+		      print "Step 4 Termination"
+		curr_gen += 1
+	config.f=config.out_dir+'/'+sys.argv[1]+'/'+str(config.Iter)+'archive.txt'
+	if len(chunks) == 1 or config.Iter == 5:
+		break
+		end = time.time()
+		print 'relapse time is ',(end - start)
+if __name__ == '__main__':
+	
+	#pool = Pool()
+    #pool = multiprocessing.Pool(processes=config.core_num)
+
+    main()
+
