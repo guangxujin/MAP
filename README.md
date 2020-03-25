@@ -10,7 +10,7 @@ pip install git+git://github.com/guangxujin/MAP.git#egg=MAP
 
 
 ## Installation of Python Packages
-Python 2.7 or 3.8
+Python 2.7 or >=3.6
 
 Numba
 
